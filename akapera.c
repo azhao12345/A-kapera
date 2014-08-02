@@ -27,15 +27,19 @@ int main()
     
     //use a 100 MB buffer for now
     size_t buffer_size = 100 * 1000000;
-    stereo_sample *buffer = (stereo_sample *)malloc(buffer_size);
+    stereo_sample *buffer = (stereo_sample *)malloc(buffer_size * buffer_size);
     //read the data into the buffer, then copy it into a properly sized array for the data
     size_t vocal_size = fread(buffer, sizeof(stereo_sample), buffer_size, vocal);
-    stereo_sample *vocal_data = (stereo_sample *)malloc(vocal_size);
-    memcpy(vocal_data, buffer, vocal_size);
+    printf("%d\n", (int)vocal_size);
+    printf("%d\n", ferror(vocal));
+    printf("%d\n", feof(vocal));
+    return 0;
+    stereo_sample *vocal_data = (stereo_sample *)malloc(vocal_size * sizeof(stereo_sample));
+    memcpy(vocal_data, buffer, vocal_size * sizeof(stereo_sample));
 
     size_t inst_size = fread(buffer, sizeof(stereo_sample), buffer_size, inst);
-    stereo_sample *inst_data = (stereo_sample *)malloc(inst_size);
-    memcpy(inst_data, buffer, inst_size);
+    stereo_sample *inst_data = (stereo_sample *)malloc(inst_size * sizeof(stereo_sample));
+    memcpy(inst_data, buffer, inst_size * sizeof(stereo_sample));
 
     //free the buffer since we don't need it anymore
     //free(buffer);
@@ -44,8 +48,8 @@ int main()
 //    printf("%d\n", alignmentValue(vocal_data, inst_data, 2000000));
 //    printf("%d\n", alignmentValue(vocal_data, inst_data, 1000000));
     //now we will do the alignment
-    printf("limit: %d\n",  vocal_size / 500);
-    unsigned int alignmentIndex;
+//    printf("limit: %d\n",  vocal_size / 500);
+    unsigned int alignmentIndex = 0;
     unsigned int minAlignment = alignmentValue(vocal_data, inst_data, vocal_size / 100);
     for(unsigned int i = 0; i < vocal_size / 500; i++)
     {
@@ -75,7 +79,7 @@ int main()
     }
     printf("%d\n", numSamples);
 
-
+    memset(buffer, 0, buffer_size);
     for(unsigned int i = 0; i < numSamples; i++)
     {
         buffer[i].left = vocal_data[i + alignmentIndex].left - inst_data[i].left;

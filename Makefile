@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -O0 -Wall -std=c11
+CFLAGS = -g -O3 -Wall -std=c11
 OBJECTS = akapera.o
 
 all: akapera
