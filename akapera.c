@@ -27,7 +27,7 @@ int main()
     
     //use a 100 MB buffer for now
     size_t buffer_size = 100 * 1000000;
-    stereo_sample *buffer = (stereo_sample *)malloc(buffer_size * buffer_size);
+    stereo_sample *buffer = (stereo_sample *)malloc(sizeof(stereo_sample)* buffer_size);
     //read the data into the buffer, then copy it into a properly sized array for the data
     size_t vocal_size = fread(buffer, sizeof(stereo_sample), buffer_size, vocal);
     printf("%d\n", (int)vocal_size);
