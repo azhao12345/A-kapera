@@ -18,7 +18,19 @@ typedef struct stereo_sample
 
 unsigned int alignmentValue(stereo_sample *first, stereo_sample *second, unsigned int length);
 unsigned int difference(int16_t first, int16_t second);
-
+int16_t ssub(int16_t first, int16_t second)
+{
+    int difference = (int)first - (int)second;
+    if(difference > INT16_MAX)
+    {
+        return INT16_MAX;
+    }
+    else if(difference < INT16_MIN)
+    {
+        return INT16_MIN;
+    }
+    return difference;
+}
 
 int main()
 {
@@ -30,10 +42,6 @@ int main()
     stereo_sample *buffer = (stereo_sample *)malloc(sizeof(stereo_sample)* buffer_size);
     //read the data into the buffer, then copy it into a properly sized array for the data
     size_t vocal_size = fread(buffer, sizeof(stereo_sample), buffer_size, vocal);
-    printf("%d\n", (int)vocal_size);
-    printf("%d\n", ferror(vocal));
-    printf("%d\n", feof(vocal));
-    return 0;
     stereo_sample *vocal_data = (stereo_sample *)malloc(vocal_size * sizeof(stereo_sample));
     memcpy(vocal_data, buffer, vocal_size * sizeof(stereo_sample));
 
@@ -82,8 +90,8 @@ int main()
     memset(buffer, 0, buffer_size);
     for(unsigned int i = 0; i < numSamples; i++)
     {
-        buffer[i].left = vocal_data[i + alignmentIndex].left - inst_data[i].left;
-        buffer[i].right = vocal_data[i + alignmentIndex].right - inst_data[i].right;
+        buffer[i].left = ssub(vocal_data[i + alignmentIndex].left, inst_data[i].left);
+        buffer[i].right = ssub(vocal_data[i + alignmentIndex].right, inst_data[i].right);
     }
     
     FILE *out = fopen("./out.raw", "w");
