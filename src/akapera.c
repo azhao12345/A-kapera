@@ -55,19 +55,21 @@ int main()
     //free(buffer);
     printf("%d\n", (int)vocal_size);
     printf("%d\n", (int)inst_size);
+    fflush(stdout);
 //    printf("%d\n", alignmentValue(vocal_data, inst_data, 2000000));
 //    printf("%d\n", alignmentValue(vocal_data, inst_data, 1000000));
     //now we will do the alignment
 //    printf("limit: %d\n",  vocal_size / 500);
     int alignmentIndex = 0;
     unsigned int minAlignment = alignmentValue(vocal_data, inst_data, vocal_size / 100);
-    for(int i = -((int)(vocal_size / 500)); i < (int)(vocal_size / 500); i++)
+    for(int i = -((int)(vocal_size / 100)); i < (int)(vocal_size / 100); i++)
     {
         //printf("%d\n", alignmentValue(vocal_data + i, inst_data, vocal_size / 10));
         if(i%1000==0)
         {
             printf("%d\n", i);
             printf("%d\n", alignmentValue(vocal_data + i, inst_data, vocal_size / 100));
+            fflush(stdout); 
         }
         unsigned int val = alignmentValue(vocal_data + i, inst_data, vocal_size / 100);
         if(val < minAlignment)
