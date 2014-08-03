@@ -44,7 +44,7 @@ int main()
     size_t vocal_size = fread(buffer, sizeof(stereo_sample), buffer_size, vocal);
     stereo_sample *vocal_data = (stereo_sample *)malloc(((vocal_size / 10) + vocal_size) * sizeof(stereo_sample));
     memset(vocal_data, 0, sizeof(stereo_sample) * vocal_size / 10);
-    vocal_data = vocal_data + (vocal_size / 10);
+    vocal_data += (vocal_size / 10);
     memcpy(vocal_data, buffer, vocal_size * sizeof(stereo_sample));
 
     size_t inst_size = fread(buffer, sizeof(stereo_sample), buffer_size, inst);
@@ -90,7 +90,7 @@ int main()
     printf("%d\n", numSamples);
 
     memset(buffer, 0, buffer_size);
-    for(unsigned int i = 0; i < numSamples; i++)
+    for(int i = 0; i < numSamples; i++)
     {
         buffer[i].left = ssub(vocal_data[i + alignmentIndex].left, inst_data[i].left);
         buffer[i].right = ssub(vocal_data[i + alignmentIndex].right, inst_data[i].right);

@@ -1,13 +1,15 @@
 CC = gcc
 CFLAGS = -g -O3 -Wall -std=c11
-OBJECTS = akapera.o
+SRCDIR = src
+BINDIR = bin
 
 all: akapera
 
-akapera: $(OBJECTS)
+akapera: $(SRCDIR)/akapera.c
+	$(CC) $(CFLAGS) $(SRCDIR)/akapera.c -o $(BINDIR)/akapera
 
 test: akapera
-	./akapera
+	$(BINDIR)/akapera
 
 clean:
-	rm *.o akapera
+	rm $(BINDIR)/akapera
