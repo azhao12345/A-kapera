@@ -18,10 +18,16 @@ files="$infile $outfile $encodeout"
 cd $workdir
 mkdir -p $indir $outdir
 
-echo "Input files:"
-ls $indir/*.flac
+# Check for any input files
+ls $indir/*.flac > /dev/null
 if [ $? != 0 ]; then
   echo "Error: no input files"
+  exit 1
+fi
+
+# Check inst.raw exists
+if ! [ -f $workdir/inst.raw ]; then
+  echo "Error: need inst.raw to run"
   exit 1
 fi
 
